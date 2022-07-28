@@ -30,7 +30,7 @@ public class SystemInterfaceUtil {
     public static final int DEFAULT_LINES_PER_PAGE = 10;
 
     public static String getHeader(String screenName, ConsolePosition pos) {
-        final String HEADER_START_TEXT = "Coffee Bank";
+        final String HEADER_START_TEXT = "Sommus Market";
         final String time = TimeUtil.nowString();
         final int consoleMiddleRow = pos.getColumn() / 2;
         final int screenNameStartPadding = consoleMiddleRow - HEADER_START_TEXT.length() - (screenName.length() / 2);

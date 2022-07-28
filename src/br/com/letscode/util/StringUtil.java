@@ -8,11 +8,11 @@ public class StringUtil {
     private static final NumberFormat CURRENCY_FORMATTER = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
     public static String multiply(String str, int times) {
-        String newStr = "";
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < times; i++) {
-            newStr = newStr.concat(str);
+            sb.append(str);
         }
-        return newStr;
+        return sb.toString();
     }
 
     public static String blankSpaces(int quantity) {
@@ -21,8 +21,7 @@ public class StringUtil {
 
     public static String addBlankSpacesToAllLines(String s, int quantity) {
         String spaces = blankSpaces(quantity);
-        s = spaces.concat(s);
-        s = s.replaceAll("\n", ConsoleUtil.NEW_LINE + spaces);
+        s = spaces.concat(s).replaceAll("\n", ConsoleUtil.NEW_LINE + spaces);
         return s;
     }
 
@@ -95,10 +94,10 @@ public class StringUtil {
                 + cnpj.substring(12);
     }
 
-    public static boolean isParseableToDouble(String number){
-        try{
+    public static boolean isParseableToDouble(String number) {
+        try {
             Double.parseDouble(number);
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
         return true;

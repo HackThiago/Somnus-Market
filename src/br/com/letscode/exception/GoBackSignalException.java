@@ -1,4 +1,4 @@
-package br.com.letscode.error;
+package br.com.letscode.exception;
 
 public class GoBackSignalException extends Exception {
     public GoBackSignalException(String errorMessage) {

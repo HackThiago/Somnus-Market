@@ -46,13 +46,46 @@ public class Database<K extends Serializable, E extends Serializable> {
         return DATABASE_PATH + "/" + DAOClass.getSimpleName().toUpperCase() + "." + DATABASE_FILE_EXTENSION;
     }
 
-    @SuppressWarnings("unchecked")
+    private String objectToBase64(Serializable object) {
+        final String EXCEPTION_MESSAGE = "Não foi possível converter o objeto para base64.";
+
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(object);
+            oos.close();
+            baos.close();
+            return Base64.getEncoder().encodeToString(baos.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException(EXCEPTION_MESSAGE, e);
+        }
+    }
+
+    private Object base64ToObject(String base64) throws IOException, ClassNotFoundException {
+        final String EXCEPTION_MESSAGE = "Não foi possível converter a base64 para um objeto.";
+
+        try {
+            ByteArrayInputStream bais = new ByteArrayInputStream(Base64.getDecoder().decode(base64));
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            Object entity = ois.readObject();
+            ois.close();
+            bais.close();
+            return entity;
+        } catch (IOException e) {
+            throw new IOException(EXCEPTION_MESSAGE, e);
+        } catch (ClassNotFoundException e) {
+            throw new ClassNotFoundException(EXCEPTION_MESSAGE, e);
+        }
+    }
+
     private void editLine(K key, String newLine, boolean addLineIfNotFound) throws IOException, ClassNotFoundException {
         final String EXCEPTION_MESSAGE = "Não foi possível editar a tabela de dados.";
 
         try {
-            BufferedReader databaseTableFile = new BufferedReader(new FileReader(getDataBaseTablePath()));
+            String base64Key = objectToBase64(key);
             StringBuilder inputBuilder = new StringBuilder();
+            BufferedReader databaseTableFile = new BufferedReader(new FileReader(getDataBaseTablePath()));
+
             String line;
             boolean found = false;
             while ((line = databaseTableFile.readLine()) != null) {
@@ -60,12 +93,7 @@ public class Database<K extends Serializable, E extends Serializable> {
                     continue;
                 }
 
-                byte[] idData = Base64.getDecoder().decode(line.split(DATABASE_SEPARATOR)[0]);
-                ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(idData));
-                K entityId = (K) ois.readObject();
-                ois.close();
-
-                if (entityId.equals(key)) {
+                if (line.split(DATABASE_SEPARATOR)[0].equals(base64Key)) {
                     line = newLine;
                     found = true;
                 }
@@ -97,29 +125,16 @@ public class Database<K extends Serializable, E extends Serializable> {
 
         } catch (IOException e) {
             throw new IOException(EXCEPTION_MESSAGE, e);
-        } catch (ClassNotFoundException e) {
-            throw new ClassNotFoundException(EXCEPTION_MESSAGE, e);
         }
     }
 
     public void save(K key, E entity) throws IOException, ClassNotFoundException {
         StringBuilder dbLine = new StringBuilder();
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject(key);
-        dbLine.append(Base64.getEncoder().encodeToString(baos.toByteArray()));
-        baos.close();
-        oos.close();
-
-        baos = new ByteArrayOutputStream();
-        oos = new ObjectOutputStream(baos);
-        oos.writeObject(entity);
+        dbLine.append(objectToBase64(key));
         dbLine.append(DATABASE_SEPARATOR);
-        dbLine.append(Base64.getEncoder().encodeToString(baos.toByteArray()));
+        dbLine.append(objectToBase64(entity));
         dbLine.append(System.lineSeparator());
-        baos.close();
-        oos.close();
 
         editLine(key, dbLine.toString(), true);
     }
@@ -134,6 +149,8 @@ public class Database<K extends Serializable, E extends Serializable> {
 
         try {
             E entity = null;
+            String base64Id = objectToBase64(id);
+
             FileReader inputFile = new FileReader(this.getDataBaseTablePath());
             BufferedReader br = new BufferedReader(inputFile);
             String line;
@@ -143,19 +160,12 @@ public class Database<K extends Serializable, E extends Serializable> {
                 }
 
                 String[] entityDataBase64 = line.split(DATABASE_SEPARATOR);
-                byte[] idData = Base64.getDecoder().decode(entityDataBase64[0]);
-                ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(idData));
-                K entityId = (K) ois.readObject();
-                ois.close();
 
-                if (!entityId.equals(id)) {
+                if (!entityDataBase64[0].equals(base64Id)) {
                     continue;
                 }
 
-                byte[] entityData = Base64.getDecoder().decode(entityDataBase64[1]);
-                ois = new ObjectInputStream(new ByteArrayInputStream(entityData));
-                entity = (E) ois.readObject();
-                ois.close();
+                entity = (E) base64ToObject(entityDataBase64[1]);
                 break;
             }
             br.close();
@@ -185,17 +195,10 @@ public class Database<K extends Serializable, E extends Serializable> {
                 }
 
                 String[] entityDataBase64 = line.split(DATABASE_SEPARATOR);
-                byte[] idData = Base64.getDecoder().decode(entityDataBase64[0]);
-                ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(idData));
-                K entityId = (K) ois.readObject();
-                ois.close();
-
-                byte[] entityData = Base64.getDecoder().decode(entityDataBase64[1]);
-                ois = new ObjectInputStream(new ByteArrayInputStream(entityData));
-                E entity = (E) ois.readObject();
-                ois.close();
+                E entity = (E) base64ToObject(entityDataBase64[1]);
 
                 if (filter.test(entity)) {
+                    K entityId = (K) base64ToObject(entityDataBase64[0]);
                     entities.put(entityId, entity);
                 }
             }

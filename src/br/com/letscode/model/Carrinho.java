@@ -52,4 +52,16 @@ public class Carrinho {
         int novaQuantidade = produtos.get(produto) - quantidade;
         produtos.put(produto, novaQuantidade);
     }
+
+    public void alterarQuantidade(Produto produto, int quantidade) throws QuantidadeInvalidaException, CarrinhoNaoPossuiProdutoException {
+        if (quantidade <= 0) {
+            throw new QuantidadeInvalidaException("Quantidade não pode ser negativa!");
+        }
+
+        if (!produtos.containsKey(produto)) {
+            throw new CarrinhoNaoPossuiProdutoException("Produto não encontrado no carrinho.");
+        }
+
+        produtos.put(produto, quantidade);
+    }
 }

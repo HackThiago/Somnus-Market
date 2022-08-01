@@ -2,9 +2,10 @@ package br.com.letscode.model.produto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class Produto implements Serializable {
-    private String ID;
+    private UUID ID;
     private String nome;
     private BigDecimal preco;
     private ProdutoTipo tipo;
@@ -16,11 +17,11 @@ public class Produto implements Serializable {
         taxa = BigDecimal.ZERO;
     }
 
-    public String getID() {
+    public UUID getID() {
         return ID;
     }
 
-    public void setID(String ID) {
+    public void setID(UUID ID) {
         this.ID = ID;
     }
 

@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 import br.com.letscode.exception.ExitSignalException;
 import br.com.letscode.exception.GoBackSignalException;
-import br.com.letscode.model.ConsolePosition;
-import br.com.letscode.model.Message;
+import br.com.letscode.model.system.ConsolePosition;
+import br.com.letscode.model.system.Message;
 
 public class SystemInterfaceUtil {
     public static final int DEFAULT_CONSOLE_WIDTH = 108;

@@ -1,4 +1,4 @@
-package br.com.letscode.model;
+package br.com.letscode.model.system;
 
 public class ConsolePosition {
     private int row;

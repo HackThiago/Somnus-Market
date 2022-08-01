@@ -2,7 +2,7 @@ package br.com.letscode;
 
 import java.util.Scanner;
 
-import br.com.letscode.model.Navigation;
+import br.com.letscode.model.system.Navigation;
 import br.com.letscode.screens.ExitScreen;
 import br.com.letscode.screens.ScreenInterface;
 import br.com.letscode.screens.ScreensList;

@@ -1,4 +1,4 @@
-package br.com.letscode.model;
+package br.com.letscode.model.system;
 
 public class Message {
     private String text;

@@ -3,8 +3,8 @@ package br.com.letscode.screens;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import br.com.letscode.model.ConsolePosition;
-import br.com.letscode.model.Navigation;
+import br.com.letscode.model.system.ConsolePosition;
+import br.com.letscode.model.system.Navigation;
 import br.com.letscode.util.ConsoleUtil;
 import br.com.letscode.util.StringUtil;
 import br.com.letscode.util.SystemInterfaceUtil;

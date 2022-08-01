@@ -19,13 +19,18 @@ import java.util.function.Predicate;
 import br.com.letscode.exception.FalhaInicializandoBancoDeDadosError;
 
 public class Database<K extends Serializable, E extends Serializable> {
-    final Class<E> DAOClass;
+    private final Class<E> DAOClass;
+    private final Map<K, E> databaseCache;
 
-    static final String DATABASE_PATH = "./db";
-    static final String DATABASE_FILE_EXTENSION = "csv";
-    static final String DATABASE_SEPARATOR = ",";
+    private static final String DATABASE_PATH = "./db";
+    private static final String DATABASE_FILE_EXTENSION = "csv";
+    private static final String DATABASE_SEPARATOR = ",";
 
     public Database(Class<E> DAOClass) {
+        this(DAOClass, false);
+    }
+
+    public Database(Class<E> DAOClass, boolean caching) {
         final String EXCEPTION_MESSAGE = "Não foi possível criar o arquivo de dados.";
 
         this.DAOClass = DAOClass;
@@ -39,6 +44,12 @@ public class Database<K extends Serializable, E extends Serializable> {
             } catch (IOException e) {
                 throw new FalhaInicializandoBancoDeDadosError(EXCEPTION_MESSAGE, e);
             }
+        }
+
+        if (caching) {
+            databaseCache = new HashMap<>();
+        } else {
+            databaseCache = null;
         }
     }
 
@@ -137,19 +148,31 @@ public class Database<K extends Serializable, E extends Serializable> {
         dbLine.append(System.lineSeparator());
 
         editLine(key, dbLine.toString(), true);
+
+        if (databaseCache != null) {
+            databaseCache.put(key, entity);
+        }
     }
 
-    public void delete(K id) throws IOException, ClassNotFoundException {
-        editLine(id, null, false);
+    public void delete(K key) throws IOException, ClassNotFoundException {
+        editLine(key, null, false);
+
+        if (databaseCache != null) {
+            databaseCache.remove(key);
+        }
     }
 
     @SuppressWarnings("unchecked")
-    public E get(K id) throws IOException, ClassNotFoundException {
+    public E get(K key) throws IOException, ClassNotFoundException {
         final String EXCEPTION_MESSAGE = "Não foi possível carregar a entidade.";
+
+        if (databaseCache != null && databaseCache.containsKey(key)) {
+            return databaseCache.get(key);
+        }
 
         try {
             E entity = null;
-            String base64Id = objectToBase64(id);
+            String base64Key = objectToBase64(key);
 
             FileReader inputFile = new FileReader(this.getDataBaseTablePath());
             BufferedReader br = new BufferedReader(inputFile);
@@ -161,7 +184,7 @@ public class Database<K extends Serializable, E extends Serializable> {
 
                 String[] entityDataBase64 = line.split(DATABASE_SEPARATOR);
 
-                if (!entityDataBase64[0].equals(base64Id)) {
+                if (!entityDataBase64[0].equals(base64Key)) {
                     continue;
                 }
 
@@ -170,6 +193,10 @@ public class Database<K extends Serializable, E extends Serializable> {
             }
             br.close();
             inputFile.close();
+
+            if (databaseCache != null) {
+                databaseCache.put(key, entity);
+            }
 
             return entity;
         } catch (IOException e) {
@@ -198,8 +225,12 @@ public class Database<K extends Serializable, E extends Serializable> {
                 E entity = (E) base64ToObject(entityDataBase64[1]);
 
                 if (filter.test(entity)) {
-                    K entityId = (K) base64ToObject(entityDataBase64[0]);
-                    entities.put(entityId, entity);
+                    K entityKey = (K) base64ToObject(entityDataBase64[0]);
+                    entities.put(entityKey, entity);
+
+                    if (databaseCache != null) {
+                        databaseCache.put(entityKey, entity);
+                    }
                 }
             }
             br.close();

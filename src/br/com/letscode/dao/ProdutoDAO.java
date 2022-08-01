@@ -8,7 +8,7 @@ import br.com.letscode.database.Database;
 import br.com.letscode.model.produto.Produto;
 
 public abstract class ProdutoDAO {
-    private static final Database<String, Produto> database = new Database<>(Produto.class);
+    private static final Database<String, Produto> database = new Database<>(Produto.class, true);
 
     public static void save(String key, Produto entity) throws ClassNotFoundException, IOException {
         database.save(key, entity);

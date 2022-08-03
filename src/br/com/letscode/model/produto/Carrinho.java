@@ -1,6 +1,5 @@
 package br.com.letscode.model.produto;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
@@ -84,7 +83,7 @@ public class Carrinho {
         Map<ProdutoTipo, Promocao> promocoes;
         try {
             promocoes = PromocaoDAO.listAll();
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (DatabaseException e) {
             throw new DatabaseException("Erro ao tentar acessar o banco de dados.", e);
         }
 

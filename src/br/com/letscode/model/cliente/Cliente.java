@@ -50,7 +50,8 @@ public abstract class Cliente {
         }
 
         private void validate() {
-            if (!this.cliente.validarDocumento()) {
+            if (this.cliente.documento == null
+                    || !this.cliente.validarDocumento()) {
                 final String EXCEPTION_MESSAGE = "Informações do cliente inválidas: ".concat(cliente.toString());
                 throw new IllegalStateException(EXCEPTION_MESSAGE);
             }

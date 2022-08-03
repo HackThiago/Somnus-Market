@@ -13,8 +13,9 @@ public class Produto implements Serializable {
     private BigDecimal taxa;
 
     public Produto() {
-        frete = BigDecimal.ZERO;
-        taxa = BigDecimal.ZERO;
+        this.preco = BigDecimal.ZERO;
+        this.frete = BigDecimal.ZERO;
+        this.taxa = BigDecimal.ZERO;
     }
 
     public UUID getID() {
@@ -94,5 +95,57 @@ public class Produto implements Serializable {
     public String toString() {
         return "Produto [ID=" + ID + ", nome=" + nome + ", preco=" + preco + ", tipo=" + tipo + ", frete=" + frete
                 + ", taxa=" + taxa + "]";
+    }
+
+    public static class Builder {
+        private Produto produto;
+
+        public Builder() {
+            this.produto = new Produto();
+        }
+
+        public Builder withID(UUID ID) {
+            this.produto.setID(ID);
+            return this;
+        }
+
+        public Builder withNome(String nome) {
+            this.produto.setNome(nome);
+            return this;
+        }
+
+        public Builder withPreco(BigDecimal preco) {
+            this.produto.setPreco(preco);
+            return this;
+        }
+
+        public Builder withTipo(ProdutoTipo tipo) {
+            this.produto.setTipo(tipo);
+            return this;
+        }
+
+        public Builder withFrete(BigDecimal frete) {
+            this.produto.setFrete(frete);
+            return this;
+        }
+
+        public Builder withTaxa(BigDecimal taxa) {
+            this.produto.setTaxa(taxa);
+            return this;
+        }
+
+        public Produto build() {
+            this.validate();
+            return this.produto;
+        }
+
+        private void validate() {
+            if (this.produto.preco.compareTo(BigDecimal.ZERO) < 0
+                    || this.produto.frete.compareTo(BigDecimal.ZERO) < 0
+                    || this.produto.taxa.compareTo(BigDecimal.ZERO) < 0) {
+                final String EXCEPTION_MESSAGE = "Informações do produto inválidas: ".concat(produto.toString());
+                throw new IllegalStateException(EXCEPTION_MESSAGE);
+            }
+        }
     }
 }

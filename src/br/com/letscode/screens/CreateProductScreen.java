@@ -165,15 +165,15 @@ public class CreateProductScreen implements ScreenInterface {
                     formStep++;
                     continue;
                 case 3:
-                    precoProduto = new BigDecimal(Double.parseDouble(userInput));
+                    precoProduto = new BigDecimal(Double.parseDouble(userInput)).setScale(3);
                     formStep++;
                     continue;
                 case 4:
-                    taxaProduto = new BigDecimal(Double.parseDouble(userInput));
+                    taxaProduto = new BigDecimal(Double.parseDouble(userInput)).setScale(3);
                     formStep++;
                     continue;
                 case 5:
-                    freteProduto = new BigDecimal(Double.parseDouble(userInput));
+                    freteProduto = new BigDecimal(Double.parseDouble(userInput)).setScale(3);
                     formStep++;
                 default:
                     break;

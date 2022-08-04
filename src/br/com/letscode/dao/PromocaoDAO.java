@@ -4,13 +4,16 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import br.com.letscode.database.Database;
-import br.com.letscode.database.FileDatabase;
 import br.com.letscode.exception.DatabaseException;
 import br.com.letscode.model.produto.ProdutoTipo;
 import br.com.letscode.model.produto.Promocao;
 
 public abstract class PromocaoDAO {
-    private static final Database<ProdutoTipo, Promocao> database = new FileDatabase<>(Promocao.class, true);
+    private static Database<ProdutoTipo, Promocao> database;
+
+    public static void setDatabase(Database<ProdutoTipo, Promocao> newDatabase) {
+        database = newDatabase;
+    }
 
     public static void save(ProdutoTipo key, Promocao entity) throws DatabaseException {
         database.save(key, entity);

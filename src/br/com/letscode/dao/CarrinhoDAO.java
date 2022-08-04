@@ -5,12 +5,15 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 import br.com.letscode.database.Database;
-import br.com.letscode.database.MemoryDatabase;
 import br.com.letscode.exception.DatabaseException;
 import br.com.letscode.model.produto.Carrinho;
 
 public abstract class CarrinhoDAO {
-    private static final Database<UUID, Carrinho> database = new MemoryDatabase<>();
+    private static Database<UUID, Carrinho> database;
+
+    public static void setDatabase(Database<UUID, Carrinho> newDatabase) {
+        database = newDatabase;
+    }
 
     public static void save(UUID key, Carrinho entity) throws DatabaseException {
         database.save(key, entity);

@@ -5,12 +5,15 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 import br.com.letscode.database.Database;
-import br.com.letscode.database.FileDatabase;
 import br.com.letscode.exception.DatabaseException;
 import br.com.letscode.model.produto.Produto;
 
 public abstract class ProdutoDAO {
-    private static final Database<UUID, Produto> database = new FileDatabase<>(Produto.class, true);
+    private static Database<UUID, Produto> database;
+
+    public static void setDatabase(Database<UUID, Produto> newDatabase) {
+        database = newDatabase;
+    }
 
     public static void save(UUID key, Produto entity) throws DatabaseException {
         database.save(key, entity);

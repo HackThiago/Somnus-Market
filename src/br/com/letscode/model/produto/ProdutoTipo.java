@@ -4,5 +4,6 @@ public enum ProdutoTipo {
     LIMPEZA,
     VESTUARIO,
     PET,
-    COMIDA;
+    COMIDA,
+    OUTROS;
 }

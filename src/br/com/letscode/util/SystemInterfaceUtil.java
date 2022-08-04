@@ -1,9 +1,17 @@
 package br.com.letscode.util;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
+import br.com.letscode.dao.PromocaoDAO;
+import br.com.letscode.exception.DatabaseException;
 import br.com.letscode.exception.ExitSignalException;
 import br.com.letscode.exception.GoBackSignalException;
+import br.com.letscode.model.produto.Produto;
+import br.com.letscode.model.produto.ProdutoTipo;
+import br.com.letscode.model.produto.Promocao;
 import br.com.letscode.model.system.ConsolePosition;
 import br.com.letscode.model.system.Message;
 
@@ -129,6 +137,48 @@ public class SystemInterfaceUtil {
         ConsoleUtil.skipLines(1);
         System.out.print(StringUtil.centralize("Página " + currentPage + "/" + totalPages + ConsoleUtil.NEW_LINE,
                 consoleSize.getColumn()));
+    }
+
+    public static String getProductsList(List<Produto> productsList, int lineWidth) {
+        String productsListString = "";
+        for (int i = 0; i < productsList.size(); i++) {
+            Produto produto = productsList.get(i);
+            productsListString += "#"
+                    + String.valueOf(i + 1)
+                    + " "
+                    + produto.getNome()
+                    + " - "
+                    + produto.getTipo()
+                    + " / Preço: "
+                    + StringUtil.formatCurrencyBRL(produto.getPreco())
+                    + " - Taxas: "
+                    + StringUtil.formatCurrencyBRL(produto.getTaxa())
+                    + " - Frete: "
+                    + StringUtil.formatCurrencyBRL(produto.getFrete())
+                    + ConsoleUtil.NEW_LINE;
+        }
+        return StringUtil.centralizeBlock(productsListString, lineWidth);
+    }
+
+    public static String getProductTypesList(List<ProdutoTipo> productTypesList, int lineWidth)
+            throws DatabaseException {
+        Map<ProdutoTipo, Promocao> promotions = PromocaoDAO.listAll();
+
+        String productTypesListString = "";
+        for (int i = 0; i < productTypesList.size(); i++) {
+            ProdutoTipo productType = productTypesList.get(i);
+            Promocao promotion = promotions.get(productType);
+            productTypesListString += "#"
+                    + String.valueOf(i + 1)
+                    + " "
+                    + productType.name().toUpperCase()
+                    + (promotion != null
+                            ? " - " + promotion.getPorcentagemDesconto().multiply(BigDecimal.valueOf(100))
+                                    + "% de desconto"
+                            : "")
+                    + ConsoleUtil.NEW_LINE;
+        }
+        return StringUtil.centralizeBlock(productTypesListString, lineWidth);
     }
 
     public static String getUserInput(Scanner scanner, ConsolePosition consoleSize, String message)

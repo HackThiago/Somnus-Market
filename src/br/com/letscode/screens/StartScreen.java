@@ -47,6 +47,6 @@ public class StartScreen implements ScreenInterface {
         args[1] = String.valueOf(consolePos.getColumn());
 
         ConsoleUtil.clearScreen();
-        return new Navigation(ScreensList.EXIT, args);
+        return new Navigation(ScreensList.MAIN, args);
     }
 }

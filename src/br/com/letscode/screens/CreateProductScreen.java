@@ -70,7 +70,9 @@ public class CreateProductScreen implements ScreenInterface {
                     return true;
                 }
                 break;
-            case 3, 4, 5:
+            case 3:
+            case 4:
+            case 5:
                 try {
                     Double price = Double.parseDouble(answer);
                     if (price >= 0) {

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class Produto implements Serializable {
+public class Produto implements Serializable, Comparable<Produto> {
     private UUID ID;
     private String nome;
     private BigDecimal preco;
@@ -92,6 +92,20 @@ public class Produto implements Serializable {
     }
 
     @Override
+    public int compareTo(Produto obj) {
+        if (this == obj) {
+            return 0;
+        }
+        if (obj == null) {
+            return 1;
+        }
+        if (!this.tipo.equals(obj.getTipo())) {
+            return this.tipo.compareTo(obj.getTipo());
+        }
+        return this.nome.compareTo(obj.getNome());
+    }
+
+    @Override
     public String toString() {
         return "Produto [ID=" + ID + ", nome=" + nome + ", preco=" + preco + ", tipo=" + tipo + ", frete=" + frete
                 + ", taxa=" + taxa + "]";
@@ -148,4 +162,5 @@ public class Produto implements Serializable {
             }
         }
     }
+
 }

@@ -1,6 +1,7 @@
 package br.com.letscode.screens;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -141,7 +142,8 @@ public class CreateProductScreen implements ScreenInterface {
                 return new Navigation(ScreensList.EXIT, args);
             } catch (GoBackSignalException e) {
                 ConsoleUtil.clearScreen();
-                return new Navigation(ScreensList.MAIN, args);
+                String[] returnArgs = { args[0], args[1] };
+                return new Navigation(ScreensList.MAIN, returnArgs);
             } catch (NoSuchElementException e) {
                 // do nothing
             }
@@ -165,15 +167,15 @@ public class CreateProductScreen implements ScreenInterface {
                     formStep++;
                     continue;
                 case 3:
-                    precoProduto = new BigDecimal(Double.parseDouble(userInput)).setScale(3);
+                    precoProduto = new BigDecimal(Double.parseDouble(userInput)).setScale(3, RoundingMode.FLOOR);
                     formStep++;
                     continue;
                 case 4:
-                    taxaProduto = new BigDecimal(Double.parseDouble(userInput)).setScale(3);
+                    taxaProduto = new BigDecimal(Double.parseDouble(userInput)).setScale(3, RoundingMode.FLOOR);
                     formStep++;
                     continue;
                 case 5:
-                    freteProduto = new BigDecimal(Double.parseDouble(userInput)).setScale(3);
+                    freteProduto = new BigDecimal(Double.parseDouble(userInput)).setScale(3, RoundingMode.FLOOR);
                     formStep++;
                 default:
                     break;

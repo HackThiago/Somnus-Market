@@ -142,7 +142,8 @@ public class ProductTypesScreen implements ScreenInterface {
                 return new Navigation(ScreensList.EXIT, args);
             } catch (GoBackSignalException e) {
                 ConsoleUtil.clearScreen();
-                return new Navigation(ScreensList.MAIN, StringUtil.removeArgFromList(args, 2));
+                String[] returnArgs = {args[0], args[1]};
+                return new Navigation(ScreensList.MAIN, returnArgs);
             } catch (NoSuchElementException e) {
                 // do nothing
             }

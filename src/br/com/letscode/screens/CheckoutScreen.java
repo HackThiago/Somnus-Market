@@ -134,7 +134,8 @@ public class CheckoutScreen implements ScreenInterface {
                 return new Navigation(ScreensList.EXIT, args);
             } catch (GoBackSignalException e) {
                 ConsoleUtil.clearScreen();
-                return new Navigation(ScreensList.MAIN, args);
+                String[] returnArgs = { args[0], args[1], args[2] };
+                return new Navigation(ScreensList.SESSION, returnArgs);
             } catch (NoSuchElementException e) {
                 // do nothing
             }

@@ -1,6 +1,7 @@
 package br.com.letscode.screens;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -163,6 +164,7 @@ public class SessionScreen implements ScreenInterface {
             message.setType(MessageType.ERROR);
             productsList = new ArrayList<>();
         }
+        Collections.sort(productsList);
 
         UUID sessionID;
         try {
@@ -214,8 +216,8 @@ public class SessionScreen implements ScreenInterface {
                 return new Navigation(ScreensList.EXIT, args);
             } catch (GoBackSignalException e) {
                 ConsoleUtil.clearScreen();
-                return new Navigation(ScreensList.MAIN,
-                        StringUtil.removeArgFromList(args, 3));
+                String[] returnArgs = { args[0], args[1] };
+                return new Navigation(ScreensList.MAIN, returnArgs);
             } catch (NoSuchElementException e) {
                 // do nothing
             }

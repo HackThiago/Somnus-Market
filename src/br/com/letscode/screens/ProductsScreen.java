@@ -1,6 +1,7 @@
 package br.com.letscode.screens;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -67,6 +68,7 @@ public class ProductsScreen implements ScreenInterface {
             message.setType(MessageType.ERROR);
             productsList = new ArrayList<>();
         }
+        Collections.sort(productsList);
 
         String content = SystemInterfaceUtil.getProductsList(productsList, consoleSize.getColumn());
         int page = 1;
@@ -88,7 +90,8 @@ public class ProductsScreen implements ScreenInterface {
                 return new Navigation(ScreensList.EXIT, args);
             } catch (GoBackSignalException e) {
                 ConsoleUtil.clearScreen();
-                return new Navigation(ScreensList.MAIN, StringUtil.removeArgFromList(args, 2));
+                String[] returnArgs = { args[0], args[1] };
+                return new Navigation(ScreensList.MAIN, returnArgs);
             } catch (NoSuchElementException e) {
                 // do nothing
             }

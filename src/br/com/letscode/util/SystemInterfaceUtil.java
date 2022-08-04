@@ -9,6 +9,7 @@ import br.com.letscode.dao.PromocaoDAO;
 import br.com.letscode.exception.DatabaseException;
 import br.com.letscode.exception.ExitSignalException;
 import br.com.letscode.exception.GoBackSignalException;
+import br.com.letscode.model.produto.Carrinho;
 import br.com.letscode.model.produto.Produto;
 import br.com.letscode.model.produto.ProdutoTipo;
 import br.com.letscode.model.produto.Promocao;
@@ -157,6 +158,34 @@ public class SystemInterfaceUtil {
                     + StringUtil.formatCurrencyBRL(produto.getFrete())
                     + ConsoleUtil.NEW_LINE;
         }
+        return StringUtil.centralizeBlock(productsListString, lineWidth);
+    }
+
+    public static String getSessionProductsList(Carrinho session, List<Produto> productsList, int lineWidth) {
+        Map<Produto, Integer> sessionProducts = session.listar();
+
+        String productsListString = "";
+        for (int i = 0; i < productsList.size(); i++) {
+            Produto produto = productsList.get(i);
+            productsListString += "#"
+                    + String.valueOf(i + 1)
+                    + " "
+                    + produto.getNome()
+                    + " - "
+                    + produto.getTipo()
+                    + " / Preço: "
+                    + StringUtil.formatCurrencyBRL(produto.getPreco())
+                    + " - Taxas: "
+                    + StringUtil.formatCurrencyBRL(produto.getTaxa())
+                    + " - Frete: "
+                    + StringUtil.formatCurrencyBRL(produto.getFrete())
+                    + " / Total no carrinho: "
+                    + (sessionProducts.get(produto) != null
+                            ? sessionProducts.get(produto)
+                            : 0)
+                    + ConsoleUtil.NEW_LINE;
+        }
+
         return StringUtil.centralizeBlock(productsListString, lineWidth);
     }
 

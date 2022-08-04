@@ -1,7 +1,7 @@
 package br.com.letscode.screens;
 
 public enum ScreensList {
-    START, EXIT, MAIN, PRODUCTS, PRODUCT_TYPES, SESSION, CREATE_PRODUCT;
+    START, EXIT, MAIN, PRODUCTS, PRODUCT_TYPES, SESSION, CREATE_PRODUCT, CHECKOUT;
 
     public ScreenInterface createInstance() {
         ScreenInterface screenInstance;
@@ -26,6 +26,9 @@ public enum ScreensList {
                 break;
             case CREATE_PRODUCT:
                 screenInstance = new CreateProductScreen();
+                break;
+            case CHECKOUT:
+                screenInstance = new CheckoutScreen();
                 break;
             default:
                 screenInstance = new ExitScreen();

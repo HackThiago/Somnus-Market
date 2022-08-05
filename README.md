@@ -2,6 +2,8 @@
 
 *Simulação de um carrinho de compras em Java.*
 
+![image](https://user-images.githubusercontent.com/40358789/183122257-6f01d6cc-ea49-4e35-a151-41dba100f15a.png)
+
 ___
 
 ## **Relatório**

@@ -1,4 +1,4 @@
-# **Somnus-Market**
+# **Somnus-Market 😴**
 
 *Simulação de um carrinho de compras em Java.*
 
@@ -46,8 +46,6 @@ ___
 
 ### [**Carrinho**](/src/br/com/letscode/model/produto/Carrinho.java)
 
-___
-
 Um carrinho possui uma lista de produtos, que é, na verdade, a associação de um produto com uma quantidade (um *Map*), e também pode ter um *Cliente*; são exemplos de *composição*. As responsabilidades do carrinho são as seguintes: *adicionar*, *remover*, ou *alterar* a quantidade de um item, *listar* o total de itens do carrinho, *calcular* o total do carrinho, e *adicionar* um cliente ao carrinho.
 
 ___
@@ -55,6 +53,8 @@ ___
 ### [**Promoção**](/src/br/com/letscode/model/produto/Promocao.java)
 
 Pode haver uma ou mais promoções associadas a algum dos tipos dos produtos do carrinho. Para que essas promoções sejam consideradas no preço total, a função de calcular o total do Carrinho busca todas as promoções existente no banco de dados, utilizando a classe intermediária para acessar a base de dados ([**PromocaoDAO**](/src/br/com/letscode/dao/PromocaoDAO.java)); depois que esses dados são recuperados o total é calculado.
+
+ ⚠ A promoção é aplicada sobre o preço do produto, não sobre o total do carrinho (as taxas e o frete não são considerados).
 
 ___
 
